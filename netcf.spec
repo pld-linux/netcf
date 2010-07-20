@@ -2,11 +2,12 @@ Summary:	netcf is a cross-platform network configuration library
 Summary(pl.UTF-8):	netcf to wieloplatformowa biblioteka do konfiguracji sieci
 Name:		netcf
 Version:	0.1.6
-Release:	0.1
+Release:	0.2
 License:	GPLv2
 Group:		Administration/System
 Source0:	https://fedorahosted.org/released/netcf/%{name}-%{version}.tar.gz
 # Source0-md5:	c19914d97b23be1837036d23cbdc6473
+Patch0:		%{name}-pld_interfaces.patch
 URL:		https://fedorahosted.org/netcf/
 BuildRequires:	augeas-devel
 BuildRequires:	libxslt-devel
@@ -57,6 +58,7 @@ Ten pakiet zawiera statyczne biblioteki netcf.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 
