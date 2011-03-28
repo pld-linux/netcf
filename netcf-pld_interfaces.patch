@@ -1,6 +1,6 @@
---- netcf-0.1.6/src/drv_initscripts.c	2010-04-15 04:06:33.000000000 +0200
-+++ netcf-0.1.6/src/drv_initscripts.c_new	2010-07-20 09:31:07.502370512 +0200
-@@ -51,14 +51,14 @@ static const char *const network_scripts
+--- netcf-0.1.7/src/drv_initscripts.c~	2010-09-23 14:13:13.000000000 +0200
++++ netcf-0.1.7/src/drv_initscripts.c	2011-03-28 20:11:43.092188473 +0200
+@@ -52,14 +52,14 @@
      "/files/etc/sysconfig/network-scripts";
  
  static const char *const ifcfg_path =
@@ -10,7 +10,7 @@
  /* Augeas should only load the files we are interested in */
  static const struct augeas_pv augeas_xfm_common_pv[] = {
      /* Ifcfg files */
-     { "/augeas/load/Ifcfg/lens", "Shellvars.lns" },
+     { "/augeas/load/Ifcfg/lens", "Sysconfig.lns" },
      { "/augeas/load/Ifcfg/incl",
 -      "/etc/sysconfig/network-scripts/ifcfg-*" },
 +      "/etc/sysconfig/interfaces/ifcfg-*" },
