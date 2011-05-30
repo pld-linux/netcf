@@ -1,9 +1,9 @@
-Summary:	netcf is a cross-platform network configuration library
-Summary(pl.UTF-8):	netcf to wieloplatformowa biblioteka do konfiguracji sieci
+Summary:	netcf - a cross-platform network configuration library
+Summary(pl.UTF-8):	netcf - wieloplatformowa biblioteka do konfiguracji sieci
 Name:		netcf
 Version:	0.1.7
 Release:	1
-License:	GPLv2
+License:	GPL v2
 Group:		Administration/System
 Source0:	https://fedorahosted.org/released/netcf/%{name}-%{version}.tar.gz
 # Source0-md5:	8e313b623c907eb035cf3948b71fecc2
@@ -16,19 +16,21 @@ Requires:	augeas
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
+netcf is a cross-platform network configuration library.
 
 %description -l pl.UTF-8
+netcf to wieloplatformowa biblioteka do konfiguracji sieci.
 
 %package libs
-Summary:	Netcf libraries
-Summary(pl.UTF-8):	Biblioteki netcf
+Summary:	Netcf library
+Summary(pl.UTF-8):	Biblioteka netcf
 Group:		Libraries
 
 %description libs
-This package contains the netcf libraries.
+This package contains the netcf shared library.
 
 %description libs -l pl.UTF-8
-Ten pakiet zawiera biblioteki netcf.
+Ten pakiet zawiera bibliotekę współdzieloną netcf.
 
 %package devel
 Summary:	Netcf development files
@@ -45,43 +47,41 @@ Ten pakiet zawiera pliki nagłówkow służące do programowania z użyciem
 API netcf.
 
 %package static
-Summary:	The netcf static libraries
-Summary(pl.UTF-8):	Statyczne biblioteki netcf
+Summary:	The netcf static library
+Summary(pl.UTF-8):	Statyczna biblioteka netcf
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
-This package contains the netcf static libraries.
+This package contains the netcf static library.
 
 %description static -l pl.UTF-8
-Ten pakiet zawiera statyczne biblioteki netcf.
+Ten pakiet zawiera statyczną bibliotekę netcf.
 
 %prep
 %setup -q
 %patch0 -p1
 
 %build
-
 %configure 
 
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
+
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-
 %clean
 rm -rf $RPM_BUILD_ROOT
-
 
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root)  %{_bindir}/ncftool
+%attr(755,root,root) %{_bindir}/ncftool
 %{_datadir}/netcf   
 
 %files libs
@@ -91,10 +91,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libnetcf.so
 %{_libdir}/libnetcf.la
-%{_libdir}/libnetcf.so
-%{_pkgconfigdir}/netcf.pc
 %{_includedir}/netcf.h
+%{_pkgconfigdir}/netcf.pc
 
 %files static
 %defattr(644,root,root,755)
