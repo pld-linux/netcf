@@ -17,3 +17,53 @@
      { "/augeas/load/Ifcfg/excl[1]", "*~" },
      { "/augeas/load/Ifcfg/excl[2]", "*.bak" },
      { "/augeas/load/Ifcfg/excl[3]", "*.orig" },
+--- netcf-0.1.9/src/netcf-transaction.init.sh.orig	2011-05-20 20:40:22.000000000 +0200
++++ netcf-0.1.9/src/netcf-transaction.init.sh	2011-08-13 09:14:09.519761783 +0200
+@@ -30,13 +30,12 @@
+ sysconfdir="@sysconfdir@"
+ localstatedir="@localstatedir@"
+ 
+-netconfdir="$sysconfdir"/sysconfig/network-scripts
++netconfdir="$sysconfdir"/sysconfig/interfaces
+ snapshotdir="$localstatedir"/lib/netcf/network-snapshot
+ rollbackdirbase="$localstatedir"/lib/netcf/network-rollback
+ 
+ # Source function library.
+-test ! -r "$sysconfdir"/rc.d/init.d/functions ||
+-    . "$sysconfdir"/rc.d/init.d/functions
++. "$sysconfdir"/rc.d/init.d/functions
+ 
+ # take a snapshot of current network configuration scripts
+ change_begin ()
+@@ -195,8 +194,8 @@
+ # usage [val]
+ # Display usage string, then exit with VAL (defaults to 2).
+ usage() {
+-    echo $"Usage: $0 {change-begin|change-commit|change-rollback|snapshot-dir|start|stop|status|restart|condrestart|try-restart|reload|force-reload}"
+-    exit ${1-2}
++    msg_usage "$0 {change-begin|change-commit|change-rollback|snapshot-dir|start|stop|status|restart|condrestart|try-restart|reload|force-reload}")
++    exit ${1:-2}
+ }
+ 
+ # See how we were called.
+@@ -208,7 +207,7 @@
+ case "$1" in
+     # commands required in all Fedora initscripts
+     start|restart|reload|force-reload|condrestart|try-restart)
+-        echo -n $"Running $prog $1: "
++        nls "Forcing network configuration rollback"
+         change_rollback
+         # ignore the "no pending transaction" error
+         test "$retval" != "$EINVALID_IN_THIS_STATE" && retval=$?
+@@ -217,9 +216,9 @@
+     stop|status)
+         if test -d "$snapshotdir"
+         then
+-            echo $"There is an open transaction"
++            nls "There is an open transaction"
+         else
+-            echo $"No open transaction"
++            nls "No open transaction"
+         fi
+         ;;
+ 
