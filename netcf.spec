@@ -1,19 +1,20 @@
-# PLDify netcf-transaction more
+# TODO: enhance pld_interfaces patch, including PLDifing netcf-transaction (or disabling it)
+#  maybe create drv_pld.c?
 Summary:	netcf - a cross-platform network configuration library
 Summary(pl.UTF-8):	netcf - wieloplatformowa biblioteka do konfiguracji sieci
 Name:		netcf
-Version:	0.1.9
+Version:	0.2.2
 Release:	1
 License:	GPL v2
 Group:		Administration/System
 Source0:	https://fedorahosted.org/released/netcf/%{name}-%{version}.tar.gz
-# Source0-md5:	4d62010a79d56c12438969da9035b63c
+# Source0-md5:	fbcd47101797b8fcd9519e22002cd200
 Patch0:		%{name}-pld_interfaces.patch
 URL:		https://fedorahosted.org/netcf/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake >= 1:1.11
 BuildRequires:	augeas-devel >= 0.5.0
-BuildRequires:	libnl1-devel >= 1.1
+BuildRequires:	libnl-devel >= 3.2
 BuildRequires:	libtool
 BuildRequires:	libxml2-devel >= 2.0
 BuildRequires:	libxslt-devel
@@ -79,7 +80,7 @@ Ten pakiet zawiera statyczną bibliotekę netcf.
 %{__automake}
 %configure \
 	--disable-silent-rules \
-	--with-init-script=redhat
+	--with-driver=redhat
 
 %{__make}
 
@@ -100,6 +101,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/ncftool
 %attr(754,root,root) /etc/rc.d/init.d/netcf-transaction
 %{_datadir}/netcf   
+%{_mandir}/man1/ncftool.1*
 
 %files libs
 %defattr(644,root,root,755)
