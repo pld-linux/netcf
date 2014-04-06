@@ -41,7 +41,7 @@
  usage() {
 -    echo $"Usage: $0 {change-begin|change-commit|change-rollback|snapshot-dir|start|stop|status|restart|condrestart|try-restart|reload|force-reload}"
 -    exit ${1-2}
-+    msg_usage "$0 {change-begin|change-commit|change-rollback|snapshot-dir|start|stop|status|restart|condrestart|try-restart|reload|force-reload}")
++    msg_usage "$0 {change-begin|change-commit|change-rollback|snapshot-dir|start|stop|status|restart|condrestart|try-restart|reload|force-reload}"
 +    exit ${1:-2}
  }
  
