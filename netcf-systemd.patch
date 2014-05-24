@@ -1,0 +1,108 @@
+--- netcf-0.2.4/configure.ac.orig	2014-05-14 12:01:08.000000000 +0200
++++ netcf-0.2.4/configure.ac	2014-05-24 07:27:55.530147003 +0200
+@@ -104,7 +104,7 @@
+ AC_MSG_CHECKING([for system init flavor])
+ AC_ARG_WITH([sysinit],
+   [AS_HELP_STRING([--with-sysinit@<:@=STYLE@:>@],
+-    [Style of init script to install: initscripts, systemd,
++    [Style of init script to install: initscripts, systemd, both,
+      check, none @<:@default=check@:>@])],
+   [],[with_sysinit=check])
+ 
+@@ -113,6 +113,8 @@
+        ;;
+     initscripts)
+        ;;
++    both)
++       ;;
+     none)
+        ;;
+     check)
+@@ -135,8 +137,8 @@
+   with_sysinit=none
+ fi
+ 
+-AM_CONDITIONAL([NETCF_USE_INITSCRIPTS], test "$with_sysinit" = "initscripts")
+-AM_CONDITIONAL([NETCF_USE_SYSTEMD], test "$with_sysinit" = "systemd")
++AM_CONDITIONAL([NETCF_USE_INITSCRIPTS], test "$with_sysinit" = "initscripts" -o "$with_sysinit" = "both")
++AM_CONDITIONAL([NETCF_USE_SYSTEMD], test "$with_sysinit" = "systemd" -o "$with_sysinit" = "both")
+ AM_CONDITIONAL([NETCF_TRANSACTION_SUPPORT], test "$with_sysinit" != "none")
+ AC_MSG_RESULT($with_sysinit)
+ if test "$with_sysinit" != "none" && test "$with_driver" != "redhat"; then
+--- netcf-0.2.4/src/Makefile.am.orig	2014-05-09 13:37:17.000000000 +0200
++++ netcf-0.2.4/src/Makefile.am	2014-05-24 07:51:17.630117778 +0200
+@@ -119,10 +119,6 @@
+ 
+ if NETCF_DRIVER_REDHAT
+ 
+-install-data-local: install-sysinit
+-
+-uninstall-local: uninstall-sysinit
+-
+ # This is for the shell script that handles network config change
+ # transactions. It is used by both the initscripts and systemd
+ # flavors, as well as by libnetcf.so itself
+@@ -136,13 +132,19 @@
+ 
+ BUILT_SOURCES += netcf-transaction.sh
+ 
++INSTALL_TARGETS =
++UNINSTALL_TARGETS =
++
+ if NETCF_USE_INITSCRIPTS
+-install-sysinit: netcf-transaction.init
++INSTALL_TARGETS += install-sysinit-init
++UNINSTALL_TARGETS += uninstall-sysinit-init
++
++install-sysinit-init: netcf-transaction.init
+ 	$(MKDIR_P) $(DESTDIR)$(sysconfdir)/rc.d/init.d
+ 	$(INSTALL_SCRIPT) netcf-transaction.init \
+ 	  $(DESTDIR)$(sysconfdir)/rc.d/init.d/netcf-transaction
+ 
+-uninstall-sysinit:
++uninstall-sysinit-init:
+ 	rm -f $(DESTDIR)$(sysconfdir)/rc.d/init.d/netcf-transaction \
+ 	  $(DESTDIR)$(sysconfdir)/sysconfig/netcf-transaction
+ 
+@@ -157,17 +159,20 @@
+ 
+ BUILT_SOURCES += netcf-transaction.init
+ 
+-else ! NETCF_USE_INITSCRIPTS
++endif NETCF_USE_INITSCRIPTS
+ 
+ if NETCF_USE_SYSTEMD
++INSTALL_TARGETS += install-sysinit-systemd
++UNINSTALL_TARGETS += uninstall-sysinit-systemd
++
+ SYSTEMD_UNIT_DIR = $(prefix)/lib/systemd/system
+ 
+-install-sysinit: netcf-transaction.service
++install-sysinit-systemd: netcf-transaction.service
+ 	$(MKDIR_P) $(DESTDIR)$(SYSTEMD_UNIT_DIR)
+ 	$(INSTALL_DATA) netcf-transaction.service \
+ 	  $(DESTDIR)$(SYSTEMD_UNIT_DIR)/netcf-transaction.service
+ 
+-uninstall-sysinit:
++uninstall-sysinit-systemd:
+ 	rm -f $(DESTDIR)$(SYSTEMD_UNIT_DIR)/netcf-transaction.service
+ 	rmdir $(DESTDIR)$(SYSTEMD_UNIT_DIR) ||:
+ 
+@@ -180,11 +185,12 @@
+ 
+ BUILT_SOURCES += netcf-transaction.service
+ 
+-else ! NETCF_USE_SYSTEMD
+-install-sysinit:
+-uninstall-sysinit:
+-endif ! NETCF_USE_SYSTEMD
+-endif ! NETCF_USE_INITSCRIPTS
++endif NETCF_USE_SYSTEMD
++
++install-data-local: $(INSTALL_TARGETS)
++
++uninstall-local: $(UNINSTALL_TARGETS)
++
+ endif NETCF_DRIVER_REDHAT
+ 
+ DISTCLEANFILES += $(BUILT_SOURCES)

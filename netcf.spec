@@ -3,13 +3,14 @@
 Summary:	netcf - a cross-platform network configuration library
 Summary(pl.UTF-8):	netcf - wieloplatformowa biblioteka do konfiguracji sieci
 Name:		netcf
-Version:	0.2.3
-Release:	3
+Version:	0.2.4
+Release:	1
 License:	GPL v2
 Group:		Administration/System
 Source0:	https://fedorahosted.org/released/netcf/%{name}-%{version}.tar.gz
-# Source0-md5:	bee292470b06201b59af0fad473a1b65
+# Source0-md5:	91d3a8e26544406ad4b3a1ee376ef6d8
 Patch0:		%{name}-pld_interfaces.patch
+Patch1:		%{name}-systemd.patch
 URL:		https://fedorahosted.org/netcf/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake >= 1:1.11
@@ -71,6 +72,7 @@ Ten pakiet zawiera statyczną bibliotekę netcf.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1 -b .orig
 
 %build
 %{__libtoolize}
@@ -80,14 +82,16 @@ Ten pakiet zawiera statyczną bibliotekę netcf.
 %{__automake}
 %configure \
 	--disable-silent-rules \
-	--with-driver=redhat
+	--with-driver=redhat \
+	--with-sysinit=both
 
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
+	DESTDIR=$RPM_BUILD_ROOT \
+	SYSTEMD_UNIT_DIR=%{systemdunitdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -99,11 +103,14 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/ncftool
 %attr(754,root,root) /etc/rc.d/init.d/netcf-transaction
+%attr(754,root,root) %{_libexecdir}/netcf-transaction.sh
+%{systemdunitdir}/netcf-transaction.service
 %{_datadir}/netcf   
 %{_mandir}/man1/ncftool.1*
 
 %files libs
 %defattr(644,root,root,755)
+%doc AUTHORS NEWS README
 %attr(755,root,root) %{_libdir}/libnetcf.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libnetcf.so.1
 

@@ -17,8 +17,8 @@
      { "/augeas/load/Ifcfg/excl[1]", "*~" },
      { "/augeas/load/Ifcfg/excl[2]", "*.bak" },
      { "/augeas/load/Ifcfg/excl[3]", "*.orig" },
---- netcf-0.1.9/src/netcf-transaction.init.sh.orig	2011-05-20 20:40:22.000000000 +0200
-+++ netcf-0.1.9/src/netcf-transaction.init.sh	2011-08-13 09:14:09.519761783 +0200
+--- netcf-0.2.4/src/netcf-transaction.sh.in.orig	2011-05-20 20:40:22.000000000 +0200
++++ netcf-0.2.4/src/netcf-transaction.sh.in	2011-08-13 09:14:09.519761783 +0200
 @@ -30,13 +30,12 @@
  sysconfdir="@sysconfdir@"
  localstatedir="@localstatedir@"
