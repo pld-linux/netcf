@@ -3,12 +3,12 @@
 Summary:	netcf - a cross-platform network configuration library
 Summary(pl.UTF-8):	netcf - wieloplatformowa biblioteka do konfiguracji sieci
 Name:		netcf
-Version:	0.2.4
+Version:	0.2.6
 Release:	1
 License:	GPL v2
 Group:		Administration/System
 Source0:	https://fedorahosted.org/released/netcf/%{name}-%{version}.tar.gz
-# Source0-md5:	91d3a8e26544406ad4b3a1ee376ef6d8
+# Source0-md5:	042f1c67f0d63d612d7481492eb91b54
 Patch0:		%{name}-pld_interfaces.patch
 Patch1:		%{name}-systemd.patch
 URL:		https://fedorahosted.org/netcf/
@@ -93,6 +93,9 @@ rm -rf $RPM_BUILD_ROOT
 	DESTDIR=$RPM_BUILD_ROOT \
 	SYSTEMD_UNIT_DIR=%{systemdunitdir}
 
+# obsoleted by pkg-config
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libnetcf.la
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -117,7 +120,6 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libnetcf.so
-%{_libdir}/libnetcf.la
 %{_includedir}/netcf.h
 %{_pkgconfigdir}/netcf.pc
 
