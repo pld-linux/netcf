@@ -7,11 +7,11 @@ Version:	0.2.8
 Release:	2
 License:	GPL v2
 Group:		Administration/System
-Source0:	https://fedorahosted.org/released/netcf/%{name}-%{version}.tar.gz
+Source0:	http://releases.pagure.org/netcf/%{name}-%{version}.tar.gz
 # Source0-md5:	8edfc9a5856468ae4f8ee97415a3dbf3
 Patch0:		%{name}-pld_interfaces.patch
 Patch1:		%{name}-systemd.patch
-URL:		https://fedorahosted.org/netcf/
+URL:		https://pagure.io/netcf/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake >= 1:1.11
 BuildRequires:	augeas-devel >= 0.5.0
