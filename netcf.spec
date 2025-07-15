@@ -4,7 +4,7 @@ Summary:	netcf - a cross-platform network configuration library
 Summary(pl.UTF-8):	netcf - wieloplatformowa biblioteka do konfiguracji sieci
 Name:		netcf
 Version:	0.2.8
-Release:	3
+Release:	4
 License:	GPL v2
 Group:		Administration/System
 Source0:	http://releases.pagure.org/netcf/%{name}-%{version}.tar.gz
